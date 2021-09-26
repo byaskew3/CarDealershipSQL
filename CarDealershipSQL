@@ -1,0 +1,300 @@
+----------------- Creating Tables from ERD ------------------
+
+CREATE TABLE customer (
+	customer_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(150),
+	last_name VARCHAR(150),
+	phone_number VARCHAR(20),
+	email VARCHAR(150),
+	payment VARCHAR(150)
+);
+
+CREATE TABLE car (
+	car_id SERIAL PRIMARY KEY,
+	car_year INTEGER,
+	car_make VARCHAR(150),
+	car_model VARCHAR(150),
+	used_new VARCHAR(150),
+	car_price INTEGER
+);
+
+CREATE TABLE parts_required(
+	parts_id SERIAL PRIMARY KEY,
+	parts_type VARCHAR(150)
+);
+
+CREATE TABLE mechanic(
+	mechanic_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(150),
+	last_name VARCHAR(150)
+);
+
+CREATE TABLE sales_person(
+	sales_person_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(150),
+	last_name VARCHAR(150)
+);
+
+CREATE TABLE services(
+	services_ticket_id SERIAL PRIMARY KEY,
+	services_price INTEGER,
+	mechanic_id INTEGER NOT NULL,
+	parts_id INTEGER NOT NULL,
+	FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id),
+	FOREIGN KEY(parts_id) REFERENCES parts_required(parts_id)
+);
+
+CREATE TABLE invoice(
+	invoice_id SERIAL PRIMARY KEY,
+	services_ticket_id INTEGER NOT NULL,
+	customer_id INTEGER NOT NULL,
+	car_id INTEGER NOT NULL,
+	sales_person_id INTEGER NOT NULL,
+	FOREIGN KEY(services_ticket_id) REFERENCES services(services_ticket_id),
+	FOREIGN KEY(customer_id) REFERENCES customer(customer_id),
+	FOREIGN KEY(car_id) REFERENCES car(car_id),
+	FOREIGN KEY(sales_person_id) REFERENCES sales_person(sales_person_id)
+);
+
+CREATE TABLE car_history(
+	car_history_id SERIAL PRIMARY KEY,
+	invoice_id INTEGER NOT NULL,
+	mechanic_id INTEGER NOT NULL,
+	FOREIGN KEY(invoice_id) REFERENCES invoice(invoice_id),
+	FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id)
+);
+
+------------------- INSERTING DATA INTO TABLES ---------------------------
+----- CUSTOMERS -----
+INSERT INTO customer(
+	customer_id,
+	first_name,
+	last_name,
+	phone_number,
+	email,
+	payment
+) VALUES (
+	1,
+	'Christian',
+	'Askew',
+	'555-555-5555',
+	'christian@gmail.com',
+	'CASH'
+);
+
+INSERT INTO customer(
+	customer_id,
+	first_name,
+	last_name,
+	phone_number,
+	email,
+	payment
+) VALUES (
+	2,
+	'Nicolle',
+	'Iron Moccasin',
+	'555-555-5555',
+	'nicolle@gmail.com',
+	'LOAN'
+);
+
+INSERT INTO customer(
+	customer_id,
+	first_name,
+	last_name,
+	phone_number,
+	email,
+	payment
+) VALUES (
+	3,
+	'Andre',
+	'Sachs',
+	'555-555-5555',
+	'andre@gmail.com',
+	'CARD'
+);
+
+SELECT *
+FROM customer
+
+----- CARS -----
+INSERT INTO car(
+	car_id,
+	car_year,
+	car_make,
+	car_model,
+	used_new,
+	car_price
+) VALUES(
+	1,
+	2020,
+	'Nissan',
+	'370z',
+	'USED',
+	25000
+);
+
+INSERT INTO car(
+	car_id,
+	car_year,
+	car_make,
+	car_model,
+	used_new,
+	car_price
+) VALUES(
+	2,
+	1975,
+	'Chevrolet',
+	'Camero',
+	'USED',
+	85000
+);
+
+INSERT INTO car(
+	car_id,
+	car_year,
+	car_make,
+	car_model,
+	used_new,
+	car_price
+) VALUES(
+	3,
+	2022,
+	'Range',
+	'Rover',
+	'NEW',
+	75000
+);
+
+SELECT *
+FROM car
+
+----- PARTS -----
+INSERT INTO parts_required(
+	parts_id,
+	parts_type
+) VALUES (
+	1,
+	'Alternator'
+);
+
+INSERT INTO parts_required(
+	parts_id,
+	parts_type
+) VALUES (
+	2,
+	'Battery'
+);
+
+INSERT INTO parts_required(
+	parts_id,
+	parts_type
+) VALUES (
+	3,
+	'Transmission'
+);
+
+SELECT *
+FROM parts_required
+
+----- MECHANICS -----
+INSERT INTO mechanic(
+	mechanic_id,
+	first_name,
+	last_name
+) VALUES (
+	1,
+	'Daniel',
+	'Askew'
+);
+
+INSERT INTO mechanic(
+	mechanic_id,
+	first_name,
+	last_name
+) VALUES (
+	2,
+	'Christoper',
+	'Bowling'
+);
+
+SELECT *
+FROM mechanic
+
+----- SALES PEOPLE -----
+INSERT INTO sales_person(
+	sales_person_id,
+	first_name,
+	last_name
+) VALUES (
+	1,
+	'Lawrence',
+	'Shields'
+);
+
+INSERT INTO sales_person(
+	sales_person_id,
+	first_name,
+	last_name
+) VALUES (
+	2,
+	'Yang',
+	'Lee'
+);
+
+SELECT *
+FROM sales_person
+
+----- SERVICES ------
+INSERT INTO services(
+	mechanic_id, 
+	parts_id,
+	services_price
+) VALUES (
+	1,
+	1,
+	199
+)
+
+SELECT *
+FROM services
+
+----- INVOICES ------
+INSERT INTO invoice(
+	services_ticket_id,
+	customer_id,
+	car_id,
+	sales_person_id
+) VALUES (
+	1,
+	2,
+	1,
+	2
+)
+
+INSERT INTO invoice(
+	services_ticket_id,
+	customer_id,
+	car_id,
+	sales_person_id
+) VALUES (
+	2,
+	3,
+	3,
+	2
+)
+
+SELECT *
+FROM invoice
+
+----- CAR HISTORY ------
+INSERT INTO car_history(
+	invoice_id,
+	mechanic_id
+) VALUES (
+	2,
+	1
+);
+
+SELECT *
+FROM car_history
